@@ -1,0 +1,13 @@
+new-trajectories-listener:
+  build: { context: ./ready_to_commit, dockerfile: Dockerfile }
+  env_file: [.env]
+  environment:
+    INFLUX_URL: "${INFLUX_URL}"
+    INFLUX_TOKEN: "${INFLUX_TOKEN}"
+    ANON_MODE: "${ANON_MODE:-true}"
+    BUCKET_SECONDS: "${BUCKET_SECONDS:-60}"
+    SAFETY_PUSH_EVERY_SEC: "${SAFETY_PUSH_EVERY_SEC:-600}"
+  depends_on:
+    postgres: { condition: service_healthy }
+  networks: [lbrp-network]
+  restart: unless-stopped
